@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Product</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_home">Ana Sayfa</string>
+    <string name="menu_about">Hakkında</string>
+    <string name="menu_exit">Çıkış</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="search">Search</string>
+</resources>

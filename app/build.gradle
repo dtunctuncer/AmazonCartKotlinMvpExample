@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-android-extensions'
+
+
+
+def STRING = 'String'
+def BUILD_TIME = 'BUILD_TIME'
+
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion "26.0.2"
+
+    defaultConfig {
+        applicationId "com.dtunctuncer.product"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField STRING, BUILD_TIME, "\"${rootProject.ext.buildTime}\""
+        buildConfigField STRING, 'BASE_API_URL', '"https://s3-eu-west-1.amazonaws.com/developer-application-test/"'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //supportLib
+    implementation rootProject.ext.supportLib
+    implementation rootProject.ext.supportLibAppCompat
+    implementation rootProject.ext.supportLibDesign
+    implementation rootProject.ext.supportLibRecyclerview
+    implementation rootProject.ext.supportLibCardview
+
+    //timber
+    implementation rootProject.ext.timber
+
+    //crashlytics
+    implementation(rootProject.ext.crashlytics) {
+        transitive = true
+    }
+
+    //di
+    implementation rootProject.ext.dagger
+    kapt rootProject.ext.daggerApt
+    //compile rootProject.ext.daggerSupport
+    //annotationProcessor rootProject.ext.daggerAnnotation
+
+    //rx
+    implementation rootProject.ext.rxJava
+    implementation rootProject.ext.rxAndroid
+    implementation rootProject.ext.rxKotlin
+
+    //net
+    implementation rootProject.ext.retrofit
+    implementation rootProject.ext.okHttp
+    implementation rootProject.ext.gson
+    implementation rootProject.ext.rxJavaAdapter
+    implementation rootProject.ext.gsonConverter
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    implementation "android.arch.persistence.room:rxjava2:1.0.0"
+    kapt "android.arch.persistence.room:compiler:1.0.0"
+
+    //picasso
+    implementation rootProject.ext.picasso
+    implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+
+    //test
+    testImplementation 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    })
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+}
+repositories {
+    mavenCentral()
+}
